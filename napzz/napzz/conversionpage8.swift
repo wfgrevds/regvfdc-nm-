@@ -130,10 +130,12 @@ struct conversionpage8: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
-}
-
-struct SleepPositionCard: View {
-    let position: SleepPosition
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    animateContent = true
+                    animateOptions = true
+                }
+            }
     let isSelected: Bool
     let animate: Bool
     let onTap: () -> Void

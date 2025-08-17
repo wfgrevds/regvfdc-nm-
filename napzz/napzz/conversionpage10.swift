@@ -229,10 +229,12 @@ struct ConversionPage10: View {
         .animation(.easeOut(duration: 0.8), value: animateContent)
         .navigationBarHidden(true)
         .onAppear {
-            withAnimation {
-                animateContent = true
-                animateCards = true
-                animateArrow = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    animateContent = true
+                    animateCards = true
+                    animateArrow = true
+                }
             }
         }
         .onDisappear {

@@ -144,9 +144,11 @@ struct conversionpage9: View {
         }
         .navigationBarHidden(true)
         .onAppear {
-            withAnimation {
-                animateContent = true
-                animateOptions = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    animateContent = true
+                    animateOptions = true
+                }
             }
         }
         .onDisappear {

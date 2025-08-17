@@ -87,8 +87,10 @@ struct ConversionPage4: View {
             ConversionPage5()
         }
         .onAppear {
-            withAnimation {
-                animateContent = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    animateContent = true
+                }
             }
         }
         .onDisappear {

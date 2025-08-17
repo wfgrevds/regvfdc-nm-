@@ -212,8 +212,10 @@ struct ConversionPage15: View {
         ConversionProgressBar(currentStep: 15, initialProgress: 14.0 / 17.0)
         .navigationBarHidden(true)
         .onAppear {
-            withAnimation {
-                animateContent = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    animateContent = true
+                }
             }
             animateCards = true
         }
