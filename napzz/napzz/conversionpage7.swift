@@ -8,208 +8,202 @@
 import SwiftUI
 
 struct ConversionPage7: View {
+    let onNext: () -> Void
     @State private var animateChart = false
     @State private var animateStars = false
-    @State private var navigateToSleepPosition = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                // Dark blue gradient background with stars
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(red: 0.05, green: 0.05, blue: 0.15),
-                        Color(red: 0.1, green: 0.1, blue: 0.2)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-                
-                // Animated star field
-                ForEach(0..<50, id: \.self) { _ in
-                    Circle()
-                        .fill(Color.white.opacity(0.3))
-                        .frame(width: CGFloat.random(in: 1...3))
-                        .position(
-                            x: CGFloat.random(in: 0...UIScreen.main.bounds.width),
-                            y: CGFloat.random(in: 0...UIScreen.main.bounds.height)
-                        )
-                        .opacity(animateStars ? 1 : 0)
-                        .animation(.easeInOut(duration: 2).delay(Double.random(in: 0...2)), value: animateStars)
-                }
-                
-                VStack(spacing: 20) {
-                    // Header with back button
-                    HStack {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                        }
-                        .padding(.leading, 20)
-                        
-                        Spacer()
-                    }
-                    .padding(.top, 10)
-                    
-                    // Robot with heart eyes
-                    VStack {
-                        Image(systemName: "heart.fill")
-                            .resizable()
-                            .frame(width: 15, height: 13)
-                            .foregroundColor(.red)
-                            .offset(x: -12, y: 20)
-                        
-                        Image(systemName: "heart.fill")
-                            .resizable()
-                            .frame(width: 15, height: 13)
-                            .foregroundColor(.red)
-                            .offset(x: 12, y: 5)
-                        
-                        Image(systemName: "face.smiling")
-                            .resizable()
-                            .frame(width: 60, height: 60)
+        ZStack {
+            // Dark blue gradient background with stars
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 0.05, green: 0.05, blue: 0.15),
+                    Color(red: 0.1, green: 0.1, blue: 0.2)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
+            // Animated star field
+            ForEach(0..<50, id: \.self) { _ in
+                Circle()
+                    .fill(Color.white.opacity(0.3))
+                    .frame(width: CGFloat.random(in: 1...3))
+                    .position(
+                        x: CGFloat.random(in: 0...UIScreen.main.bounds.width),
+                        y: CGFloat.random(in: 0...UIScreen.main.bounds.height)
+                    )
+                    .opacity(animateStars ? 1 : 0)
+                    .animation(.easeInOut(duration: 2).delay(Double.random(in: 0...2)), value: animateStars)
+            }
+            
+            VStack(spacing: 20) {
+                // Header with back button
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
                             .foregroundColor(.white)
                     }
-                    .padding(.top, 20)
+                    .padding(.leading, 20)
                     
-                    // Main headline
-                    Text("We've helped 93% of users improve their sleep")
-                        .font(.title)
-                        .fontWeight(.bold)
+                    Spacer()
+                }
+                .padding(.top, 10)
+                
+                // Robot with heart eyes
+                VStack {
+                    Image(systemName: "heart.fill")
+                        .resizable()
+                        .frame(width: 15, height: 13)
+                        .foregroundColor(.red)
+                        .offset(x: -12, y: 20)
+                    
+                    Image(systemName: "heart.fill")
+                        .resizable()
+                        .frame(width: 15, height: 13)
+                        .foregroundColor(.red)
+                        .offset(x: 12, y: 5)
+                    
+                    Image(systemName: "face.smiling")
+                        .resizable()
+                        .frame(width: 60, height: 60)
                         .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
-                    Spacer()
-                    
-                    // Chart section
-                    VStack(alignment: .leading, spacing: 16) {
-                        // Chart
-                        ZStack {
-                            // Chart background
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.black.opacity(0.3))
-                                .frame(height: 250)
-                            
-                            VStack(spacing: 20) {
-                                // "Your Ideal Sleep" label
-                                HStack {
-                                    Spacer()
-                                    HStack {
-                                        Text("Your Ideal Sleep")
-                                            .font(.headline)
-                                            .foregroundColor(Color.cyan)
-                                        Image(systemName: "checkmark.seal.fill")
-                                            .foregroundColor(Color.cyan)
-                                    }
-                                    .padding(.trailing, 30)
-                                }
-                                
-                                // Chart curve
-                                ChartView(animate: animateChart)
-                                    .frame(height: 150)
-                                
-                                // Chart labels
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text("Sleep")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                        Text("Quality")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
-                                    .padding(.leading, 20)
-                                    
-                                    Spacer()
-                                    
-                                    VStack {
-                                        Text("Time")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                        HStack {
-                                            ForEach(0..<10) { _ in
-                                                Circle()
-                                                    .fill(Color.gray)
-                                                    .frame(width: 2, height: 2)
-                                            }
-                                            Image(systemName: "arrow.right")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    .padding(.trailing, 20)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
+                }
+                .padding(.top, 20)
+                
+                // Main headline
+                Text("We've helped 93% of users improve their sleep")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Chart section
+                VStack(alignment: .leading, spacing: 16) {
+                    // Chart
+                    ZStack {
+                        // Chart background
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.black.opacity(0.3))
+                            .frame(height: 250)
                         
-                        // Request improvement text
-                        Text("Request improvement in just 3 days")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .padding(.horizontal)
-                            .padding(.leading, 20)
-                    }
-                    
-                    Spacer()
-                    
-                    // Bottom text with statistics
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text("ShutEye partnered with top sleep experts and has already helped ")
-                                .font(.body)
-                                .foregroundColor(.white)
-                            +
-                            Text("over 1,000,000 users")
-                                .font(.body)
-                                .fontWeight(.bold)
-                                .foregroundColor(.cyan)
-                            +
-                            Text(" fall asleep faster, spend more time asleep, and wake up less during the night.")
-                                .font(.body)
-                                .foregroundColor(.white)
-                        }
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                        
-                        // Continue button with navigation
-                        NavigationLink(destination: conversionpage8(), isActive: $navigateToSleepPosition) {
-                            EmptyView()
-                        }
-                        
-                        Button(action: {
-                            navigateToSleepPosition = true
-                        }) {
+                        VStack(spacing: 20) {
+                            // "Your Ideal Sleep" label
                             HStack {
                                 Spacer()
-                                Image(systemName: "arrow.right")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                                Spacer()
+                                HStack {
+                                    Text("Your Ideal Sleep")
+                                        .font(.headline)
+                                        .foregroundColor(Color.cyan)
+                                    Image(systemName: "checkmark.seal.fill")
+                                        .foregroundColor(Color.cyan)
+                                }
+                                .padding(.trailing, 30)
                             }
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(50)
-                            .frame(width: 80, height: 80)
+                            
+                            // Chart curve
+                            ChartView(animate: animateChart)
+                                .frame(height: 150)
+                            
+                            // Chart labels
+                            HStack {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Sleep")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    Text("Quality")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.leading, 20)
+                                
+                                Spacer()
+                                
+                                VStack {
+                                    Text("Time")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    HStack {
+                                        ForEach(0..<10) { _ in
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 2, height: 2)
+                                        }
+                                        Image(systemName: "arrow.right")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                                .padding(.trailing, 20)
+                            }
                         }
-                        .padding(.bottom, 40)
                     }
+                    .padding(.horizontal)
                     
-                    ConversionProgressBar(currentStep: 7, initialProgress: 6.0 / 17.0)
+                    // Request improvement text
+                    Text("Request improvement in just 3 days")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .padding(.horizontal)
+                        .padding(.leading, 20)
                 }
-                .opacity(animateContent ? 1.0 : 0.0)
-                .scaleEffect(animateContent ? 1.0 : 0.95)
-                .animation(.easeOut(duration: 0.8), value: animateContent)
+                
+                Spacer()
+                
+                // Bottom text with statistics
+                VStack(spacing: 16) {
+                    HStack {
+                        Text("ShutEye partnered with top sleep experts and has already helped ")
+                            .font(.body)
+                            .foregroundColor(.white)
+                        +
+                        Text("over 1,000,000 users")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.cyan)
+                        +
+                        Text(" fall asleep faster, spend more time asleep, and wake up less during the night.")
+                            .font(.body)
+                            .foregroundColor(.white)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                    
+                    // Continue button
+                    Button(action: {
+                        onNext()
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "arrow.right")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(50)
+                        .frame(width: 80, height: 80)
+                    }
+                    .padding(.bottom, 40)
+                }
+                
+                ConversionProgressBar(currentStep: 7, initialProgress: 6.0 / 17.0)
             }
-            .navigationBarHidden(true)
+            .opacity(animateContent ? 1.0 : 0.0)
+            .scaleEffect(animateContent ? 1.0 : 0.95)
+            .animation(.easeOut(duration: 0.8), value: animateContent)
         }
+        .navigationBarHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation {
@@ -224,7 +218,6 @@ struct ConversionPage7: View {
         .onDisappear {
             animateContent = false
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

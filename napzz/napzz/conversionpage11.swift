@@ -12,9 +12,9 @@
 import SwiftUI
 
 struct conversionpage11: View {
+    let onNext: () -> Void
     @State private var selectedAnswer: String? = nil
     @State private var animateOptions = false
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -106,14 +106,6 @@ struct conversionpage11: View {
                 Spacer()
                 
                 Spacer()
-                
-                // Navigation link (invisible)
-                NavigationLink(
-                    destination: conversionpage12(),
-                    isActive: $navigateToNext,
-                    label: { EmptyView() }
-                )
-                .hidden()
             }
             
             ConversionProgressBar(currentStep: 11, initialProgress: 10.0 / 17.0)
@@ -137,7 +129,7 @@ struct conversionpage11: View {
             if answer != nil {
                 // Auto-navigate after a short delay
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    navigateToNext = true
+                    onNext()
                 }
             }
         }

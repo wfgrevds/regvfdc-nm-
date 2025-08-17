@@ -10,7 +10,7 @@
 import SwiftUI
 
 struct ConversionPage3: View {
-    @State private var showNextPage = false
+    let onNext: () -> Void
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -56,7 +56,7 @@ struct ConversionPage3: View {
                 
                 ForEach(options, id: \.self) { option in
                     Button(action: {
-                        showNextPage = true
+                        onNext()
                     }) {
                         HStack {
                             Text(option)
@@ -78,9 +78,6 @@ struct ConversionPage3: View {
                 
                 ConversionProgressBar(currentStep: 3, initialProgress: 2.0 / 17.0)
             }
-        }
-        .navigationDestination(isPresented: $showNextPage) {
-            ConversionPage4()
         }
         .navigationBarHidden(true)
         .onAppear {

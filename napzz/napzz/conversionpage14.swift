@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct ConversionPage14: View {
+    let onNext: () -> Void
     @State private var animateCards = false
     @State private var selectedCard: Int? = nil
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -138,7 +138,7 @@ struct ConversionPage14: View {
                     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
                     impactFeedback.impactOccurred()
                     
-                    navigateToNext = true
+                    onNext()
                 }) {
                     Circle()
                         .fill(Color.blue)
@@ -157,13 +157,6 @@ struct ConversionPage14: View {
                 .padding(.bottom, 50)
             }
             
-            // Navigation link to sound machine page
-            NavigationLink(
-                destination: ConversionPage15(),
-                isActive: $navigateToNext,
-                label: { EmptyView() }
-            )
-            .hidden()
         }
         
         .opacity(animateContent ? 1.0 : 0.0)

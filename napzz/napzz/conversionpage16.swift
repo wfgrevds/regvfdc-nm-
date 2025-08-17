@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ConversionPage16: View {
+    let onNext: () -> Void
     @State private var animateCards = false
     @State private var selectedReview: Int? = nil
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -244,7 +244,7 @@ struct ConversionPage16: View {
                     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
                     impactFeedback.impactOccurred()
                     
-                    navigateToNext = true
+                    onNext()
                 }) {
                     Circle()
                         .fill(Color.blue)
@@ -263,13 +263,6 @@ struct ConversionPage16: View {
                 .padding(.bottom, 50)
             }
             
-            // Navigation link (invisible)
-            NavigationLink(
-                destination: ConversionPage17(), // Replace with your next page
-                isActive: $navigateToNext,
-                label: { EmptyView() }
-            )
-            .hidden()
         }
         
         .opacity(animateContent ? 1.0 : 0.0)

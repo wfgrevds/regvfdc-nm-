@@ -7,9 +7,9 @@
 import SwiftUI
 
 struct conversionpage13: View {
+    let onNext: () -> Void
     @State private var progress: Double = 0
     @State private var animateUsers = false
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -124,13 +124,6 @@ struct conversionpage13: View {
                 
                 Spacer()
                 
-                // Navigation link (invisible)
-                NavigationLink(
-                    destination: ConversionPage14(), // Navigate to the loading screen
-                    isActive: $navigateToNext,
-                    label: { EmptyView() }
-                )
-                .hidden()
             }
             
             ConversionProgressBar(currentStep: 13, initialProgress: 12.0 / 17.0)
@@ -189,7 +182,7 @@ struct conversionpage13: View {
                 
                 // Navigate to next page after completion
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    navigateToNext = true
+                    onNext()
                 }
             }
         }

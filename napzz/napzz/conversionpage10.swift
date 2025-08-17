@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ConversionPage10: View {
+    let onNext: () -> Void
     @State private var animateCards = false
     @State private var animateArrow = false
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
@@ -196,7 +196,7 @@ struct ConversionPage10: View {
                 
                 // Continue button
                 Button(action: {
-                    navigateToNext = true
+                    onNext()
                 }) {
                     ZStack {
                         Circle()
@@ -212,14 +212,6 @@ struct ConversionPage10: View {
                 .scaleEffect(animateCards ? 1.0 : 0.8)
                 .opacity(animateCards ? 1.0 : 0.0)
                 .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.5), value: animateCards)
-                
-                // Navigation link - Updated to navigate to the new page
-                NavigationLink(
-                    destination: conversionpage11(),
-                    isActive: $navigateToNext,
-                    label: { EmptyView() }
-                )
-                .hidden()
             }
             
             ConversionProgressBar(currentStep: 10, initialProgress: 9.0 / 17.0)

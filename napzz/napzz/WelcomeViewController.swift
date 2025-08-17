@@ -10,6 +10,7 @@ import SwiftUI
 struct WelcomeViewController: View {
     @State private var goToNextPage = false
     @State private var animateContent = false
+    @State private var currentPage = 0 // 0 = welcome, 1-17 = conversion pages
 
     var body: some View {
         NavigationStack {
@@ -157,7 +158,7 @@ struct WelcomeViewController: View {
                 .animation(.easeOut(duration: 0.8), value: animateContent)
             }
             .navigationDestination(isPresented: $goToNextPage) {
-                ConversionPage1()
+                ConversionFlowView(currentPage: $currentPage)
             }
         }
         .onAppear {
@@ -169,6 +170,60 @@ struct WelcomeViewController: View {
         }
         .onDisappear {
             animateContent = false
+        }
+    }
+}
+
+struct ConversionFlowView: View {
+    @Binding var currentPage: Int
+    
+    var body: some View {
+        Group {
+            switch currentPage {
+            case 1:
+                ConversionPage1(onNext: { currentPage = 2 })
+            case 2:
+                ConversionPage2(onNext: { currentPage = 3 })
+            case 3:
+                ConversionPage3(onNext: { currentPage = 4 })
+            case 4:
+                ConversionPage4(onNext: { currentPage = 5 })
+            case 5:
+                ConversionPage5(onNext: { currentPage = 6 })
+            case 6:
+                ConversionPage6(onNext: { currentPage = 7 })
+            case 7:
+                ConversionPage7(onNext: { currentPage = 8 })
+            case 8:
+                conversionpage8(onNext: { currentPage = 9 })
+            case 9:
+                conversionpage9(onNext: { currentPage = 10 })
+            case 10:
+                ConversionPage10(onNext: { currentPage = 11 })
+            case 11:
+                conversionpage11(onNext: { currentPage = 12 })
+            case 12:
+                conversionpage12(onNext: { currentPage = 13 })
+            case 13:
+                conversionpage13(onNext: { currentPage = 14 })
+            case 14:
+                ConversionPage14(onNext: { currentPage = 15 })
+            case 15:
+                ConversionPage15(onNext: { currentPage = 16 })
+            case 16:
+                ConversionPage16(onNext: { currentPage = 17 })
+            case 17:
+                ConversionPage17(onNext: { /* Navigate to main app */ })
+            default:
+                ConversionPage1(onNext: { currentPage = 2 })
+            }
+        }
+        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+        .animation(.easeInOut(duration: 0.6), value: currentPage)
+        .onAppear {
+            if currentPage == 0 {
+                currentPage = 1
+            }
         }
     }
 }

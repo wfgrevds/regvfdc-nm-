@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct ConversionPage17: View {
+    let onNext: () -> Void
     @State private var animateContent = false
     @State private var selectedPlan = 0 // 0 for yearly, 1 for monthly
-    @State private var navigateToNext = false
     @Environment(\.presentationMode) var presentationMode
     
     let features = [
@@ -147,7 +147,7 @@ struct ConversionPage17: View {
                         impactFeedback.impactOccurred()
                         
                         // Handle subscription purchase
-                        navigateToNext = true
+                        onNext()
                     }) {
                         Text("Continue")
                             .font(.headline)
@@ -204,14 +204,6 @@ struct ConversionPage17: View {
                     ConversionProgressBar(currentStep: 17, initialProgress: 16.0 / 17.0)
                 }
             }
-            
-            // Navigation link (invisible)
-            NavigationLink(
-                destination: ContentView(), // Navigate to main app after conversion
-                isActive: $navigateToNext,
-                label: { EmptyView() }
-            )
-            .hidden()
         }
         .opacity(animateContent ? 1.0 : 0.0)
         .scaleEffect(animateContent ? 1.0 : 0.95)

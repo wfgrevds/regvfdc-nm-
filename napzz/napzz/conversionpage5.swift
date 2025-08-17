@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct ConversionPage4: View {
+    let onNext: () -> Void
     @State private var animateContent = false
-    @State private var navigateToNext = false
     @Environment(\.presentationMode) var presentationMode
     
     let options: [(String, String)] = [
@@ -56,7 +56,7 @@ struct ConversionPage4: View {
                 
                 ForEach(options, id: \.1) { emoji, label in
                     Button(action: {
-                        navigateToNext = true
+                        onNext()
                     }) {
                         HStack {
                             Text(emoji)
@@ -83,9 +83,6 @@ struct ConversionPage4: View {
             }
         }
         .navigationBarHidden(true)
-        .navigationDestination(isPresented: $navigateToNext) {
-            ConversionPage5()
-        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation {

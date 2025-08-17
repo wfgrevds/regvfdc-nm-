@@ -12,130 +12,119 @@
 import SwiftUI
 
 struct conversionpage8: View {
+    let onNext: () -> Void
     @State private var selectedPosition: SleepPosition? = nil
     @State private var animateOptions = false
-    @State private var navigateToNext = false
     @State private var animateContent = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                // Dark background
-                Color.black
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    // Header with back button and robot
-                    HStack {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                        }
-                        .padding(.leading, 20)
-                        
-                        Spacer()
+        ZStack {
+            // Dark background
+            Color.black
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Header with back button and robot
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                            .foregroundColor(.white)
                     }
-                    .padding(.top, 10)
-                    
-                    // Robot icon
-                    ZStack {
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 80, height: 80)
-                        
-                        VStack(spacing: 4) {
-                            // Robot eyes
-                            HStack(spacing: 10) {
-                                Circle()
-                                    .fill(Color.blue)
-                                    .frame(width: 8, height: 8)
-                                Circle()
-                                    .fill(Color.blue)
-                                    .frame(width: 8, height: 8)
-                            }
-                            
-                            // Robot mouth
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.gray)
-                                .frame(width: 20, height: 4)
-                        }
-                    }
-                    .padding(.top, 20)
-                    
-                    // Title
-                    Text("What's your sleep position?")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
-                        .padding(.top, 40)
+                    .padding(.leading, 20)
                     
                     Spacer()
-                    
-                    // Sleep position options
-                    VStack(spacing: 16) {
-                        ForEach(SleepPosition.allCases, id: \.self) { position in
-                            SleepPositionCard(
-                                position: position,
-                                isSelected: selectedPosition == position,
-                                animate: animateOptions
-                            ) {
-                                selectedPosition = position
-                                // Navigate to next page after a short delay
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    navigateToNext = true
-                                }
-                            }
-                            .scaleEffect(animateOptions ? 1.0 : 0.8)
-                            .opacity(animateOptions ? 1.0 : 0.0)
-                            .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(position.rawValue) * 0.1), value: animateOptions)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                    
-                    Spacer()
-                    
                 }
-                .opacity(animateContent ? 1.0 : 0.0)
-                .scaleEffect(animateContent ? 1.0 : 0.95)
-                .animation(.easeOut(duration: 0.8), value: animateContent)
+                .padding(.top, 10)
                 
-                ConversionProgressBar(currentStep: 8, initialProgress: 7.0 / 17.0)
-                
-                // Navigation link (invisible)
-                NavigationLink(
-                    destination: conversionpage9(),
-                    isActive: $navigateToNext,
-                    label: { EmptyView() }
-                )
-                .hidden()
-            }
-            .navigationBarHidden(true)
-            .onAppear {
-                withAnimation {
-                    animateContent = true
-                    animateOptions = true
+                // Robot icon
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 80, height: 80)
+                    
+                    VStack(spacing: 4) {
+                        // Robot eyes
+                        HStack(spacing: 10) {
+                            Circle()
+                                .fill(Color.blue)
+                                .frame(width: 8, height: 8)
+                            Circle()
+                                .fill(Color.blue)
+                                .frame(width: 8, height: 8)
+                        }
+                        
+                        // Robot mouth
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.gray)
+                            .frame(width: 20, height: 4)
+                    }
                 }
+                .padding(.top, 20)
+                
+                // Title
+                Text("What's your sleep position?")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                    .padding(.top, 40)
+                
+                Spacer()
+                
+                // Sleep position options
+                VStack(spacing: 16) {
+                    ForEach(SleepPosition.allCases, id: \.self) { position in
+                        SleepPositionCard(
+                            position: position,
+                            isSelected: selectedPosition == position,
+                            animate: animateOptions
+                        ) {
+                            selectedPosition = position
+                            // Navigate to next page after a short delay
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                onNext()
+                            }
+                        }
+                        .scaleEffect(animateOptions ? 1.0 : 0.8)
+                        .opacity(animateOptions ? 1.0 : 0.0)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(Double(position.rawValue) * 0.1), value: animateOptions)
+                    }
+                }
+                .padding(.horizontal, 20)
+                
+                Spacer()
+                
+                Spacer()
+                
             }
-            .onDisappear {
-                animateContent = false
-            }
+            .opacity(animateContent ? 1.0 : 0.0)
+            .scaleEffect(animateContent ? 1.0 : 0.95)
+            .animation(.easeOut(duration: 0.8), value: animateContent)
+            
+            ConversionProgressBar(currentStep: 8, initialProgress: 7.0 / 17.0)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-    }
+        .navigationBarHidden(true)
+        .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation {
                     animateContent = true
                     animateOptions = true
                 }
             }
+        }
+        .onDisappear {
+            animateContent = false
+        }
+    }
+}
+
+struct SleepPositionCard: View {
+    let position: SleepPosition
     let isSelected: Bool
     let animate: Bool
     let onTap: () -> Void
